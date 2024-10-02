@@ -1,10 +1,13 @@
 async function getVideos() {
     const response = await fetch("https://openapi.programming-hero.com/api/phero-tube/videos");
     const data = await response.json();
-    console.log(data.videos)
-    const container = document.getElementById("videosContainer");
+    showVideos(data.videos);
+};
 
-    data.videos.forEach(item => {
+function showVideos(data) {
+    const container = document.getElementById("videosContainer");
+    container.innerHTML = "";
+    data.forEach(item => {
         container.innerHTML += `<div class="w-full">
                 <div class="w-full h-[200px] rounded-lg bg-cover bg-center relative" style="background-image: url('${item.thumbnail}')">
                 ${getPostedTime(item.others.posted_date)} 
@@ -25,7 +28,7 @@ async function getVideos() {
             </div>`;
     });
 
-};
+}
 
 function isVerified(boolean) {
     if (boolean) {
