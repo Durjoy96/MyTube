@@ -1,11 +1,23 @@
-async function getVideos() {
-    const response = await fetch("https://openapi.programming-hero.com/api/phero-tube/videos");
+async function getVideos(value = "") {
+    const response = await fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${value}`);
     const data = await response.json();
     showVideos(data.videos);
 };
 
 function showVideos(data) {
     const container = document.getElementById("videosContainer");
+
+    if(data.length === 0) {
+        document.getElementById("videosContainer").innerHTML = `
+        <div class="max-w-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4">
+        <div class="flex flex-col items-center gap-3">
+        <img class="max-w-32" src="assets/img/Icon.png" alt="">
+        <p class="text-2xl font-bold text-gray-800 text-center">Oops!! Sorry, There is no content here</p>
+        </div>
+        </div>
+        `;
+        return;
+    };
     container.innerHTML = "";
     data.forEach(item => {
         container.innerHTML += `<div class="w-full">
@@ -53,3 +65,8 @@ function getPostedTime(sec) {
 };
 
 getVideos();
+
+//search functionality
+document.getElementById("search-field").addEventListener("keyup", (e) => {
+    getVideos(e.target.value);
+})
